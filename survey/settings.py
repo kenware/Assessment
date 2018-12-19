@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'assessment'
+    'assessment',
+    'django_nose',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
+# Tell nose to measure coverage on assessment apps
+NOSE_ARGS = [
+    '--with-coverage',
+   
+]
 ROOT_URLCONF = 'survey.urls'
 
 TEMPLATES = [
@@ -72,21 +80,23 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
 
-#     'DEFAULT_RENDERER_CLASSES': (
-#         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-#         # Any other renders
-#     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        # Any other renders
+    ),
 
-#     'DEFAULT_PARSER_CLASSES': (
-#         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-#         # Any other parsers
-#     ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        # Any other parsers
+    ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+
+   'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 WSGI_APPLICATION = 'survey.wsgi.application'

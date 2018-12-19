@@ -1,0 +1,60 @@
+git default: &defaults
+  docker:
+    # specify the version you desire here
+    - image: circleci/python:3.6.5
+      environment:
+        Assessment_PATH: /home/circleci/Assessment
+        CC_TEST_REPORTER_ID: $(CC_TEST_REPORTER_ID)
+        DATABASE_NAME: circlecidb
+        DATABASE_USER: circleci
+        DATABASE_PASSWORD: ''
+        DATABASE_PORT: 5432
+        DATABASE_HOST: localhost
+    - image: postgres:9.6
+      environment:
+        POSTGRES_USER: circleci
+        POSTGRES_DB: circlecidb
+        POSTGRES_PASSWORD: '' 
+
+  working_directory: ~/Assessment
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter 
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            ./cc-test-reporter before-build
+            python manage.py test --cover-xml
+            coverage report
+            ./cc-test-reporter after-build --prefix /home/circleci/Assessment
+            coveralls
+      

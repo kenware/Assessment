@@ -15,14 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from rest_framework import routers
-from assessment.views.user import UserViewSet, MyviewSet
+from assessment.views.user import UserViewSet
 from rest_framework_jwt.views import obtain_jwt_token
 
 router = routers.DefaultRouter()
-router.register(r'api/v1/users', UserViewSet, base_name='users')
-router.register(r'api/v1/user', MyviewSet, base_name='user')
+router.register(r'users', UserViewSet, base_name='users')
 urlpatterns = [    
-    url(r'', include(router.urls)),
+    url(r'api/v1/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api/v1/login/', obtain_jwt_token),
 ]
