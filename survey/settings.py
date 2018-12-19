@@ -72,21 +72,23 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
 
-#     'DEFAULT_RENDERER_CLASSES': (
-#         'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-#         # Any other renders
-#     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        # Any other renders
+    ),
 
-#     'DEFAULT_PARSER_CLASSES': (
-#         'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-#         # Any other parsers
-#     ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+        # Any other parsers
+    ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+
+   'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 WSGI_APPLICATION = 'survey.wsgi.application'

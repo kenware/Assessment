@@ -1,23 +1,33 @@
+# Liberaries
 from django.shortcuts import render
 from rest_framework.request import Request
-from rest_framework.permissions import IsAuthenticated
-
-# Create your views here.
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from assessment.serializers.user import UserSerializer
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+from functools import partial
+
+# Local modules.
+from django.contrib.auth.models import User, Group
+from assessment.helpers.token_generator import generate_token
+from assessment.helpers.permission import AdminAuthenticatedPermission, UnauthenticatedPermission
+from assessment.serializers.user import UserSerializer
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
+    permission_classes = (IsAuthenticated|partial(UnauthenticatedPermission,['POST']),)
     serializer_class = UserSerializer
     queryset = User.objects.all()
-class MyviewSet(viewsets.ViewSet):
-    permission_classes = (IsAuthenticated,)
     def create(self, request):
-
-        print(request.user.username, 'jjjjjjjjjjjjjjjjjjjjjj')
-        return Response({"new":"newe"})
+        
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        token = generate_token(user)
+        serializer = UserSerializer(user)    
+        user_data = serializer.data
+        user_data['token'] = token
+        return Response(user_data)
