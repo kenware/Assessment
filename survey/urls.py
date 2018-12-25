@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from rest_framework import routers
 from assessment.views.user import UserViewSet
+from assessment.views.assessment_type import AssessmentTypeViewSet
 from rest_framework_jwt.views import obtain_jwt_token
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, base_name='users')
+router.register(r'assessments', AssessmentTypeViewSet, base_name='assessments')
 urlpatterns = [    
     url(r'api/v1/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

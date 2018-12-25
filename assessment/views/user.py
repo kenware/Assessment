@@ -10,7 +10,7 @@ from functools import partial
 # Local modules.
 from django.contrib.auth.models import User, Group
 from assessment.helpers.token_generator import generate_token
-from assessment.helpers.permission import AdminAuthenticatedPermission, UnauthenticatedPermission
+from assessment.helpers.permission import StaffAuthenticatedPermission, AllowedUserPermission
 from assessment.serializers.user import UserSerializer
 
 
@@ -18,7 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    permission_classes = (IsAuthenticated|partial(UnauthenticatedPermission,['POST']),)
+    permission_classes = (partial(AllowedUserPermission,['POST'], StaffAuthenticatedPermission),)
     serializer_class = UserSerializer
     queryset = User.objects.all()
     def create(self, request):

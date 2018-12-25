@@ -14,7 +14,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         validate_password(value)
         return make_password(value)
     
-    permission_classes = (IsAuthenticated,)
     def create(self, validated_data):
 
         email = validated_data.get('email')
