@@ -14,3 +14,12 @@ valid_assessment = {
     'maxTime': datetime.time(0,59),
     'totalMark': 100
 }
+
+valid_question = {
+        "id": 3,
+        "mark": "23.0000000000",
+        "questionText": "today",
+        "number": 100,
+        "multiChoice": False,
+        "createdAt": "2018-12-26"
+    }
