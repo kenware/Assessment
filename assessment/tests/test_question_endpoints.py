@@ -12,7 +12,7 @@ client = APIClient()
 from .mocks.userMock import valid_question
 
 base_url = 'http://127.0.0.1:8000/api/v1'
-class AssessmentTypeEndpointsTests(APITestCase):
+class QuestionEndpointsTests(APITestCase):
     def test_create_new_question_succeeds(self):      
 
         url = base_url + '/questions/'
@@ -60,7 +60,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
         self.assertEqual(response.data['mark'], valid_question['mark'])
 
 
-    def test_delete_assessment_succeeds(self):
+    def test_delete_question_succeeds(self):
         client = APIClient()
         new_question =  TestFixtures.new_question_object()
         token = 'Bearer ' + TestFixtures.auth_token()

@@ -52,9 +52,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            ./cc-test-reporter before-build
             python manage.py test --cover-xml
-            coverage report
-            ./cc-test-reporter after-build --prefix /home/circleci/Assessment
+            ./cc-test-reporter format-coverage coverage.xml -t "coverage.py" -o "cc.testreport.json"
+            ./cc-test-reporter upload-coverage -i cc.testreport.json
             coveralls
-      

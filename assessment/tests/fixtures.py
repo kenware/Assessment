@@ -1,6 +1,6 @@
 from .mocks.userMock import valid_user, valid_assessment, valid_question
 from django.contrib.auth.models import User
-from assessment.models import Assessment, Question
+from assessment.models import Assessment, Question, Answer
 from assessment.helpers.token_generator import generate_token
 
 class TestFixtures():
@@ -37,6 +37,23 @@ class TestFixtures():
 
     def new_question_object():
         new_assessment =  TestFixtures.new_assessment_object()
-        question = Question(assessments=new_assessment, question_text='what is todays date',mark=300)
-        question.save()
-        return Question.objects.get(question_text=question.question_text) #pylint: disable=E1101
+        return Question.objects.create(assessments=new_assessment, question_text='what is todays date',mark=300)
+
+    def new_multi_choice_question_object():
+        new_assessment =  TestFixtures.new_assessment_object()
+        return Question.objects.create(assessments=new_assessment, question_text='what is todays date',mark=300, multi_choice=True)
+        
+    def correct_choice():
+        question = TestFixtures.new_multi_choice_question_object()
+        return Answer.objects.create(choice_text='correct choice', is_correct_choice=True, questions_id=question.id)#pylint: disable=E1101
+
+    def choice():
+        question = TestFixtures.new_question_object()
+        return Answer.objects.create(choice_text='correct choice', questions_id=question.id)#pylint: disable=E1101
+
+    def choice_list():
+        question = TestFixtures.new_question_object()
+        for n in range(5):
+            answer = Answer(questions_id=question.id, choice_text='today' + str(n))
+            answer.save()
+        return question.id

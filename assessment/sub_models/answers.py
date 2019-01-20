@@ -8,6 +8,10 @@ class Answer(BaseModel):
     choice_text = models.TextField(blank=False, null=False)
     questions = models.ForeignKey(Question,related_name='answers', on_delete=models.CASCADE)
     image_url =  models.CharField(blank=True, max_length=250)
+    is_correct_choice = models.BooleanField(default=False)
     
+    def questions_id(self):
+        return None
+
     def __str__(self):
         return self.choice_text

@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from assessment.middlewares.validators.errors import raises
 from assessment.middlewares.validators.field_validators import get_or_404
 from assessment.models import Assessment, Question
+from assessment.serializers.answer import AnswerSerializer
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,7 +21,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 class EagerLoadQuestionSerializer(serializers.HyperlinkedModelSerializer):
     assessment_id = serializers.IntegerField(source='assessments_id')
-    answers = QuestionSerializer(read_only=True, many=True)
+    answers = AnswerSerializer(read_only=True, many=True)
     class Meta:
         model = Question
         fields = ('id', 'mark', 'question_text', 'number','correct_choices', 'multi_choice', 'assessment_id', 'image_url','created_at','answers')
