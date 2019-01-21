@@ -27,7 +27,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         token = generate_token(user)
-        serializer = UserSerializer(user)    
+        serializer = UserSerializer(user)
         user_data = serializer.data
         user_data['token'] = token
         return Response(user_data)

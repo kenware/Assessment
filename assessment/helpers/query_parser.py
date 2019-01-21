@@ -5,7 +5,15 @@ from assessment.middlewares.validators.constants import database_types
 class QueryParser():
     valid_include = ['children']
     excluded_fields = ['score', 'questions', 'answers','correct_choices']
-    included_params = ['include', 'order_by',]
+    included_params = ['include', 'order_by', 'assessment_id', 'question_id']
+    related_mapper = {
+        'assessmentId': {
+            'Question': 'assessments_id'
+        },
+        'questionId': {
+            'Answer': 'questions_id'
+        }
+    }
 
     @classmethod
     def parse_all(cls, model, query, schema, eagerLoadSchema=None):
@@ -33,11 +41,22 @@ class QueryParser():
         order_by = query.get('orderBy')
         for key in query.keys():
             url_queries.update(cls.query_to_dict(key, query, model))
+            url_queries = cls.filter_by_related_id(model.__name__, key, query, url_queries)
         if order_by:
             order = cls.validate_order_by(order_by, model)
             return model.objects.filter(**url_queries).order_by(order)
         return model.objects.filter(**url_queries)
     
+    @classmethod
+    def filter_by_related_id(cls, model_name, key, query, url_query):
+        related_data = cls.related_mapper.get(key)
+        if related_data and related_data.get(model_name):
+            related_id_value = query.get(key)
+            url_query.update({related_data[model_name]: related_id_value})
+        elif related_data:
+            raises_error('url_query_error', 400, key, model_name)
+        return url_query
+
     @classmethod
     def get_model_fields(cls, model):
         valid_fields = {field.name:field.get_internal_type() for field in model._meta.get_fields() if field.name not in cls.excluded_fields}

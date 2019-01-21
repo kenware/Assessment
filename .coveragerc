@@ -1,0 +1,17 @@
+
+[report]
+omit =
+  env/*
+  .env/*
+  bin/*
+  survey/*
+  */http/*
+  .circleci/*
+  manage.py
+  */encodings/idna.py
+  */stringprep.py
+  */typing.py
+  */xml/dom/pulldom.py
+  */xml/sax/expatreader.py
+  */venv/*
+  venv/*

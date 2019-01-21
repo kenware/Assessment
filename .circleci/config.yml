@@ -4,7 +4,6 @@ git default: &defaults
     - image: circleci/python:3.6.5
       environment:
         Assessment_PATH: /home/circleci/Assessment
-        CC_TEST_REPORTER_ID: $(CC_TEST_REPORTER_ID)
         DATABASE_NAME: circlecidb
         DATABASE_USER: circleci
         DATABASE_PASSWORD: ''
@@ -52,9 +51,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            ./cc-test-reporter before-build
             python manage.py test --cover-xml
-            coverage report
-            ./cc-test-reporter after-build --prefix /home/circleci/Assessment
+            ./cc-test-reporter format-coverage --debug coverage.xml -t "coverage.py" -o "cc.testreport.json"
+            ./cc-test-reporter upload-coverage --debug -i cc.testreport.json
             coveralls
-      
