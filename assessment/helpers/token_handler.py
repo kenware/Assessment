@@ -13,3 +13,4 @@ def jwt_response_payload_handler(token, user=None, request=None):
     user = UserSerializer(user, context={'request': request}).data
     user['token'] = token
     return user
+  

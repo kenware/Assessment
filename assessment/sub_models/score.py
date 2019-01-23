@@ -14,4 +14,5 @@ class Score(BaseModel):
     end_time = models.DateField( blank=True,null=True)
     
     def __str__(self):
-        return self.score
+        return self.assessment_score
+

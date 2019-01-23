@@ -1,6 +1,4 @@
 # Liberaries
-from django.shortcuts import render
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
@@ -11,7 +9,9 @@ from assessment.models import Question, Answer
 from assessment.serializers.answer import AnswerSerializer
 from assessment.helpers.permission import StaffAuthenticatedPermission, AllowedUserPermission
 from assessment.helpers.query_parser import QueryParser
-from assessment.middlewares.validators.answer_validator import is_answer_set_validator, is_same_choice_validator, validate_correct_answer
+from assessment.middlewares.validators.answer_validator import (
+    is_answer_set_validator, is_same_choice_validator, validate_correct_answer)
+from assessment.helpers.get_all_endpoints import get_paginated_and_query_filtered_data
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -22,10 +22,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     serializer_class = AnswerSerializer
     queryset = Answer.objects.all() #pylint: disable=E1101
 
-    def list(self, request):
-        url_query = request.query_params
-        question_data = QueryParser.parse_all(Answer, url_query, AnswerSerializer)
-        return Response(question_data)
+    list = get_paginated_and_query_filtered_data( Answer, AnswerSerializer, None)
 
     def create(self, request):
  

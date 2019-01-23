@@ -83,8 +83,9 @@ class AnswerEndpointsTests(APITestCase):
 
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertGreaterEqual(len(response.data), 5)
+        self.assertIsInstance(response.data, dict)
+        self.assertIsInstance(response.data['results'], list)
+        self.assertGreaterEqual(len(response.data['results']), 5)
     
     def test_update_answer_succeeds(self):
         client = APIClient()

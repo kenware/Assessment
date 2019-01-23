@@ -53,7 +53,8 @@ class AssessmentTypeEndpointsTests(APITestCase):
 
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
+        self.assertIsInstance(response.data['results'], list)
+        self.assertIsInstance(response.data, dict)
         self.assertGreaterEqual(len(response.data), 1)
     
     def test_update_assessment_succeeds(self):

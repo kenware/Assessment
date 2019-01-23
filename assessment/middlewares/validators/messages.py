@@ -11,4 +11,3 @@ error_messages = {
      'answer_set': 'The answer to the question with this id {} is already set. update question to multichoice to have many answer',
      'choice_exist': 'This answer already exist for question with this id {}. You cannot have same answer for non multichoice question'
 }
-

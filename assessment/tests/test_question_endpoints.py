@@ -19,7 +19,6 @@ class QuestionEndpointsTests(APITestCase):
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
         assessment = TestFixtures.new_assessment_object()
-        print(assessment, 'nnnnnnnnnnnnnnnnnnnn')
 
         valid_question['assessmentId'] = assessment.id
         response = client.post(url, valid_question)
@@ -45,8 +44,8 @@ class QuestionEndpointsTests(APITestCase):
 
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertGreaterEqual(len(response.data), 5)
+        self.assertIsInstance(response.data['results'], list)
+        self.assertGreaterEqual(len(response.data['results']), 5)
     
     def test_update_question_succeeds(self):
         client = APIClient()
