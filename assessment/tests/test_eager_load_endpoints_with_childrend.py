@@ -22,10 +22,11 @@ class AssessmentTypeEndpointsTests(APITestCase):
  
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertGreaterEqual(len(response.data), 1)
-        self.assertIsInstance(response.data[0]['questions'], list)
-        self.assertIsInstance(response.data[0]['questions'][0]['answers'], list)
+        self.assertIsInstance(response.data, dict)
+        self.assertIsInstance(response.data['results'], list)
+        self.assertGreaterEqual(len(response.data['results']), 1)
+        self.assertIsInstance(response.data['results'][0]['questions'], list)
+        self.assertIsInstance(response.data['results'][0]['questions'][0]['answers'], list)
     
     def test_include_children_with_wrong_value_fails(self):
         
@@ -105,8 +106,8 @@ class AssessmentTypeEndpointsTests(APITestCase):
         response = client.get(url)
         print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIsInstance(response.data, list)
-        self.assertGreaterEqual(len(response.data), 1)
-        self.assertIsInstance(response.data[0]['answers'], list)
-        self.assertEqual(response.data[0]['questionText'], 'today3')
-
+        self.assertIsInstance(response.data, dict)
+        self.assertIsInstance(response.data['results'], list)
+        self.assertGreaterEqual(len(response.data['results']), 1)
+        self.assertIsInstance(response.data['results'][0]['answers'], list)
+        self.assertEqual(response.data['results'][0]['questionText'], 'today3')

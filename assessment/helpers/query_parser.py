@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+
 from assessment.middlewares.validators.errors import raises_error
 from re import sub
 from assessment.middlewares.validators.constants import database_types
@@ -5,7 +7,7 @@ from assessment.middlewares.validators.constants import database_types
 class QueryParser():
     valid_include = ['children']
     excluded_fields = ['score', 'questions', 'answers','correct_choices']
-    included_params = ['include', 'order_by', 'assessment_id', 'question_id']
+    included_params = ['include', 'order_by', 'assessment_id', 'question_id', 'page']
     related_mapper = {
         'assessmentId': {
             'Question': 'assessments_id'
@@ -16,14 +18,27 @@ class QueryParser():
     }
 
     @classmethod
-    def parse_all(cls, model, query, schema, eagerLoadSchema=None):
-        querySet = cls.build_queryset(model, query) 
+    def parse_all(cls, *args):
+        self, model, query, schema, eagerLoadSchema=args
+        querySet = cls.build_queryset(model, query)
+        page = self.paginate_queryset(querySet)# if query.get('page') else None
+        if page is not None:
+            querySet = page
+
+        schema_data = schema(querySet, many=True).data
         if eagerLoadSchema:
-            return cls.include_children(schema, eagerLoadSchema, query, querySet, True)
-        return schema(querySet, many=True).data
+            schema_data = cls.include_children(schema, eagerLoadSchema, query, querySet, True)
+        return cls.pagination_parser(self, page, schema_data)
 
     @classmethod
-    def include_children(cls, schema, eagerLoadSchema, query, querySet, many):
+    def pagination_parser(cls, self, page, data):
+        if page is not None:
+            return self.get_paginated_response(data)
+        return Response(data)
+
+    @classmethod
+    def include_children(cls, *args):
+        schema, eagerLoadSchema, query, querySet, many = args
         include = query.get('include')
         if include:
             cls.validate_include(include)
@@ -48,7 +63,8 @@ class QueryParser():
         return model.objects.filter(**url_queries)
     
     @classmethod
-    def filter_by_related_id(cls, model_name, key, query, url_query):
+    def filter_by_related_id(cls, *args):
+        model_name, key, query, url_query = args
         related_data = cls.related_mapper.get(key)
         if related_data and related_data.get(model_name):
             related_id_value = query.get(key)
@@ -110,4 +126,3 @@ class QueryParser():
         if order_by.startswith('asc'):
             return colunm
         raises_error('order_by_error', 400, order_by, 'orderBy')
-        

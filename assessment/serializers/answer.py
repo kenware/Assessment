@@ -1,8 +1,9 @@
-from assessment.models import Question, Answer
-from rest_framework.permissions import IsAuthenticated
+
+# Liberaries
 from rest_framework import serializers
 
-
+# Local modules.
+from assessment.models import Question, Answer
 from assessment.middlewares.validators.field_validators import get_or_404
 
 

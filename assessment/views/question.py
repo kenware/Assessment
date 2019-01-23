@@ -1,18 +1,14 @@
 # Liberaries
-from django.shortcuts import render
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from functools import partial
 
 # Local modules.
-from assessment.models import Question, Assessment
-from assessment.serializers.assessment_type import AssessmentTypeSerializer
-from assessment.serializers.question import QuestionSerializer
+from assessment.models import Question
 from assessment.helpers.permission import StaffAuthenticatedPermission, AllowedUserPermission
 from assessment.serializers.question import QuestionSerializer, EagerLoadQuestionSerializer
-from assessment.helpers.query_parser import QueryParser
+from assessment.helpers.get_all_endpoints import get_paginated_and_query_filtered_data
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -23,9 +19,4 @@ class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.all() #pylint: disable=E1101
 
-    def list(self, request):
-        url_query = request.query_params
-        question_data = QueryParser.parse_all(Question, url_query, QuestionSerializer, EagerLoadQuestionSerializer)
-        return Response(question_data)
-
-
+    list = get_paginated_and_query_filtered_data(Question, QuestionSerializer, EagerLoadQuestionSerializer)

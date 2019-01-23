@@ -1,8 +1,10 @@
+# Liberaries
 from django.contrib.auth.models import User, Group
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from assessment.middlewares.validators.errors import raises
+
+# local modules
 from assessment.middlewares.validators.field_validators import validate_password, validate_email
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,5 +22,3 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         validate_email(email)
         user = User.objects.create(**validated_data)
         return user
-
-    

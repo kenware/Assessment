@@ -19,5 +19,3 @@ def get_or_404(model, id):
     exist = model.objects.filter(pk=id)
     if not exist:
         raises('not_found', 404)
-
-   

@@ -1,9 +1,10 @@
-from assessment.models import Question
+# Liberaries
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
 
-from assessment.middlewares.validators.errors import raises
+# local modules
+from assessment.models import Question
 from assessment.middlewares.validators.field_validators import get_or_404
 from assessment.models import Assessment, Question
 from assessment.serializers.answer import AnswerSerializer

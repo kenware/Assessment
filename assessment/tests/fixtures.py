@@ -5,7 +5,7 @@ from assessment.helpers.token_generator import generate_token
 
 class TestFixtures():
     def new_user():
-        user = User(email=valid_user['email'], username=valid_user['username'])
+        user = User.objects.create(email=valid_user['email'], username=valid_user['username'], password=valid_user['password'])
         return user
 
     def auth_token():

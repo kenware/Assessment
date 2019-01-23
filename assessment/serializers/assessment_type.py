@@ -1,10 +1,11 @@
-from assessment.models import Assessment
+# Liberaries
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import serializers
 
-from assessment.middlewares.validators.errors import raises
-from assessment.middlewares.validators.field_validators import validate_password, validate_email
-from assessment.serializers.question import QuestionSerializer, EagerLoadQuestionSerializer
+#Local modules
+from assessment.models import Assessment
+from assessment.serializers.question import EagerLoadQuestionSerializer
+
 class AssessmentTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Assessment
