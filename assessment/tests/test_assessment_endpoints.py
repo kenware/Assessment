@@ -22,7 +22,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
         response = client.post(url, valid_assessment)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['title'], valid_assessment['title'])
-        self.assertEqual(response.data['max_time'], '00:59:00')
+        self.assertEqual(response.data['max_time'], '00:00:01')
 
     def test_create_assessment_with_already_existing_title_and_username_fails(self):
         
@@ -69,7 +69,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
         valid_assessment['title'] = 'new survey'
         response = client.patch(url, valid_assessment)
         self.assertEqual(response.data['title'], valid_assessment['title'])
-        self.assertEqual(response.data['max_time'], '00:59:00')
+        self.assertEqual(response.data['max_time'], '00:00:01')
 
     def test_delete_assessment_succeeds(self):
         client = APIClient()

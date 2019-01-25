@@ -79,9 +79,9 @@ class AnswerEndpointsTests(APITestCase):
         question_id = TestFixtures.choice_list()
         url = base_url + f'/answers/?questionId={question_id}'
         token = 'Bearer ' + TestFixtures.auth_token()
-        client.credentials(HTTP_AUTHORIZATION=token)
-
+        client.credentials(HTTP_AUTHORIZATION=token)    
         response = client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsInstance(response.data, dict)
         self.assertIsInstance(response.data['results'], list)

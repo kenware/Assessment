@@ -14,7 +14,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     assessment_id = serializers.IntegerField(source='assessments_id')
     class Meta:
         model = Question
-        fields = ('id', 'mark', 'question_text', 'number','correct_choices', 'multi_choice', 'assessment_id', 'image_url','created_at')
+        fields = ('id', 'mark', 'question_text', 'number', 'multi_choice', 'assessment_id', 'image_url','created_at')
 
     def validate_assessment_id(self, value):      
         get_or_404(Assessment, value)
@@ -25,7 +25,7 @@ class EagerLoadQuestionSerializer(serializers.HyperlinkedModelSerializer):
     answers = AnswerSerializer(read_only=True, many=True)
     class Meta:
         model = Question
-        fields = ('id', 'mark', 'question_text', 'number','correct_choices', 'multi_choice', 'assessment_id', 'image_url','created_at','answers')
+        fields = ('id', 'mark', 'question_text', 'number', 'multi_choice', 'assessment_id', 'image_url','created_at','answers')
 
     def validate_assessment_id(self, value):      
         get_or_404(Assessment, value)

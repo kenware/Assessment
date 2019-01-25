@@ -13,6 +13,11 @@ class TestFixtures():
         user.save()
         token = generate_token(user)
         return token
+    
+    def auth_user_token():
+        user = User.objects.create(email='kenware@gmail.com', username='kenware2', is_staff=True)
+        token = generate_token(user)
+        return token, user
 
     def list_of_user():
         for n in range(5):
