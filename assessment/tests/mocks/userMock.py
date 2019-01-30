@@ -11,7 +11,7 @@ valid_user = {
 
 valid_assessment = {
     'title': 'surveyer',
-    'maxTime': datetime.time(0,59),
+    'maxTime': datetime.time(0,0,1),
     'totalMark': 100
 }
 
@@ -20,6 +20,5 @@ valid_question = {
         "mark": "23.0000000000",
         "questionText": "today",
         "number": 100,
-        "multiChoice": False,
-        "createdAt": "2018-12-26"
+        "multiChoice": False
     }

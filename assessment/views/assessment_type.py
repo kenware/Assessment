@@ -23,7 +23,6 @@ class AssessmentTypeViewSet(viewsets.ModelViewSet):
     
     list = get_paginated_and_query_filtered_data(Assessment, AssessmentTypeSerializer, EagerLoadAssessmentTypeSerializer)
 
-
     def retrieve(self, request, pk=None):
         url_query = request.query_params
         queryset = get_object_or_404(Assessment, pk=pk)

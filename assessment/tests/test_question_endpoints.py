@@ -22,6 +22,7 @@ class QuestionEndpointsTests(APITestCase):
 
         valid_question['assessmentId'] = assessment.id
         response = client.post(url, valid_question)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['question_text'], valid_question['questionText'])
         self.assertEqual(response.data['mark'], valid_question['mark'])
@@ -52,9 +53,11 @@ class QuestionEndpointsTests(APITestCase):
         new_question =  TestFixtures.new_question_object()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
+
         valid_question['assessmentId'] = new_question.assessments_id
         url = base_url + f'/questions/{new_question.id}/'
         response = client.patch(url, valid_question)
+
         self.assertEqual(response.data['question_text'], valid_question['questionText'])
         self.assertEqual(response.data['mark'], valid_question['mark'])
 
@@ -70,6 +73,3 @@ class QuestionEndpointsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response.data, None)
     
-
-
-              

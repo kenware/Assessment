@@ -1,14 +1,12 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from .base_model import BaseModel
 from .assessment_type import Assessment
 # Create your models here.
 
 class Question(BaseModel):
-    mark = models.DecimalField(max_digits=19, decimal_places=10)
+    mark = models.DecimalField(max_digits=19, decimal_places=10, default=0.0)
     number = models.IntegerField(blank=True, null=True)
     question_text = models.TextField(blank=False, null=False)
-    correct_choices = ArrayField(models.IntegerField(), default=[])
     assessments = models.ForeignKey(Assessment, related_name='questions', on_delete=models.CASCADE)
     multi_choice = models.BooleanField(default=False)
     image_url = models.CharField(blank=True, max_length=250, null=True)

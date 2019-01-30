@@ -19,3 +19,9 @@ def get_or_404(model, id):
     exist = model.objects.filter(pk=id)
     if not exist:
         raises('not_found', 404)
+
+def get_object_or_404(model, id):
+    objects = model.objects.filter(pk=id).first()
+    if not objects:
+        raises_error('object_not_found', 404, model.__name__)
+    return objects
