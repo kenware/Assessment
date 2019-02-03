@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/kenware/Assessment/tree/develop.svg?style=svg)](https://circleci.com/gh/kenware/Assessment/tree/develop)
 [![Maintainability](https://api.codeclimate.com/v1/badges/788103f2b045ee5d196f/maintainability)](https://codeclimate.com/github/kenware/Assessment/maintainability)
 ## Description
-Assessment is an open source project built with django restframework API, it is designed to accomodate any form of assessment which include survey, quize, test etc. It surport uploading of chart and graphs. in the question and answer objects
+Assessment is an open source project built with django restframework API, it is designed to accomodate any form of assessment which include survey, quize, test etc. It support uploading of chart and graphs. in the question and answer objects
 Any one can clone this project and customize it for its need.
 
 ## Installation Guide
@@ -58,6 +58,10 @@ Any one can clone this project and customize it for its need.
 * Migrate tables to postgres database
     ```bash
     python manage.py migrate
+    ```
+* Add initial data to the database
+    ```bash
+    python manage.py seed
     ```
 
 * Start the application
