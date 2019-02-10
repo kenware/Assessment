@@ -15,7 +15,7 @@ git default: &defaults
         POSTGRES_DB: circlecidb
         POSTGRES_PASSWORD: '' 
 
-  working_directory: ~/Assessment
+  working_directory: ~/repo
 
 version: 2
 jobs:
@@ -52,6 +52,6 @@ jobs:
           command: |
             . venv/bin/activate
             python manage.py test --cover-xml
-            ./cc-test-reporter format-coverage --debug coverage.xml -t "coverage.py" -o "cc.testreport.json"
-            ./cc-test-reporter upload-coverage --debug -i cc.testreport.json
+            ./cc-test-reporter format-coverage --debug -t coverage.py -o tmp/testreport.json coverage.xml
+            ./cc-test-reporter upload-coverage --debug -i tmp/testreport.json
             coveralls
