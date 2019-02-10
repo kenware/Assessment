@@ -28,4 +28,4 @@ def raises_error(error_key, status_code, *args, **kwargs):
 
     raise serializers.ValidationError({
          'message': error_messages[error_key].format(*args, **kwargs),
-         'status': 'error'})
+         'status': 'error'}, status_code)

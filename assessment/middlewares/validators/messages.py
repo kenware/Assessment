@@ -4,6 +4,7 @@ error_messages = {
      'required' : '{} field is required',
      'password_error': 'Password must contain atleast five characters',
      'not_found': 'Not found',
+     'page_error': 'Page not found',
      'object_not_found': '{} with the specified id is not found',
      'include_error': '{} is not a valid component to include. valid components are {}',
      'invalid_value': '{} is not a valid value for {}',
@@ -13,5 +14,7 @@ error_messages = {
      'choice_exist': 'This answer already exist for question with this id {}. You cannot have same answer for non multichoice question',
      'assessment_end': 'You have taken this assessment',
      'multi_times_assessment': 'You have used up the time for this assessment. you can retake this assessment',
-     'single_time_assessment': 'You have used up the time for this assessment'
+     'single_time_assessment': 'You have used up the time for this assessment',
+     'history_error': 'You must add userId and assessmentId in the query params to include assessment history',
+     'include_error': "'{}' is not a valid value to include, you can include 'history' of an assessment" 
 }
