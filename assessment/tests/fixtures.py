@@ -1,7 +1,8 @@
 from .mocks.userMock import valid_user, valid_assessment, valid_question
 from django.contrib.auth.models import User
-from assessment.models import Assessment, Question, Answer
+from assessment.models import Assessment, Question, Answer, Score
 from assessment.helpers.token_generator import generate_token
+from datetime import datetime, timezone
 
 class TestFixtures():
     def new_user():
@@ -62,3 +63,13 @@ class TestFixtures():
             answer = Answer(questions_id=question.id, choice_text='today' + str(n))
             answer.save()
         return question.id
+
+    def user_score():
+        token, user = TestFixtures.auth_user_token()
+        question = TestFixtures.new_question_object()
+        answer = Answer.objects.create(choice_text='choice', questions_id=question.id)
+        history = {question.id : [answer.id]}
+        score = Score.objects.create(user_id=user.id, assessments_id=question.assessments.id,start_time=datetime.now(timezone.utc), history=history, status='finished')
+        return token, user, question, answer, score
+        
+
