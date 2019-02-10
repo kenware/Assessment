@@ -1,3 +1,5 @@
+import django_heroku
+
 """
 Django settings for survey project.
 
@@ -193,3 +195,4 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 
 }
+django_heroku.settings(locals())

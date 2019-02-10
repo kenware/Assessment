@@ -29,7 +29,6 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
         assessment.save()
         return Question.objects.create(**validated_data)
 
-
 class EagerLoadQuestionSerializer(serializers.HyperlinkedModelSerializer):
     assessment_id = serializers.IntegerField(source='assessments_id')
     answers = AnswerSerializer(read_only=True, many=True)

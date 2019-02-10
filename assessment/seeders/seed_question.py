@@ -1,5 +1,6 @@
 
 from assessment.models import Question, Assessment
+from assessment.middlewares.validators.field_validators import get_object_or_404
 
 def seed_question():
     
@@ -17,5 +18,8 @@ def seed_question():
         Question(question_text='How many hours make one day?', assessments_id=assessment3.id,mark=2),
     ]
     for question in question_data:
+        assessment = get_object_or_404(Assessment, question.assessments_id)
+        assessment.total_mark += question.mark
+        assessment.save()
         question.save()
         print('questions successfuly seeded >>>>>>')

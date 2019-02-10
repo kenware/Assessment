@@ -42,6 +42,7 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_question_object()
+        print(question.assessments_id, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc)).save()
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
         data = {
@@ -50,6 +51,7 @@ class AssessmentEventEndpointsTests(APITestCase):
             'answerId': answer.id
         }
         response = client.post(url, data)
+        print(response.data, 'kkkkkkkkkkkkkkkkkkk')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertGreater(response.data['score'], 0)
 
