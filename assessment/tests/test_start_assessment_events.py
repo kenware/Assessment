@@ -36,7 +36,9 @@ class AssessmentEventEndpointsTests(APITestCase):
         token = 'Bearer ' + token
 
         question = TestFixtures.new_question_object()
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc)).save()
+        assessment = Assessment.objects.get(pk=question.assessments.id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,\
+        start_time=datetime.now(timezone.utc),assessment_name_id=assessment.name_id).save()
         
         Answer.objects.create(choice_text='choice', questions_id=question.id)
         url = f'{base_url}/assessments/event/?assessmentId={question.assessments_id}&include=children'
@@ -57,7 +59,8 @@ class AssessmentEventEndpointsTests(APITestCase):
         assessment = Assessment.objects.get(pk=question.assessments_id)
         assessment.multi_times = True
         assessment.save()
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc), status='finished').save()
+        Score(user_id=user.id, assessments_id=question.assessments_id,\
+        start_time=datetime.now(timezone.utc), status='finished', assessment_name_id=assessment.name_id).save()
         
         Answer.objects.create(choice_text='choice', questions_id=question.id)
         url = f'{base_url}/assessments/event/?assessmentId={question.assessments_id}&include=children'
@@ -75,7 +78,9 @@ class AssessmentEventEndpointsTests(APITestCase):
         token = 'Bearer ' + token
 
         question = TestFixtures.new_question_object()
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc), status='finished').save()
+        assessment = Assessment.objects.get(pk=question.assessments.id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc),\
+        status='finished', assessment_name_id=assessment.name_id).save()
         
         Answer.objects.create(choice_text='choice', questions_id=question.id)
         url = f'{base_url}/assessments/event/?assessmentId={question.assessments_id}&include=children'
@@ -95,7 +100,8 @@ class AssessmentEventEndpointsTests(APITestCase):
         assessment.max_time = '00:00:00'
         assessment.save()
 
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc)).save()
+        Score(user_id=user.id, assessments_id=question.assessments_id,\
+        start_time=datetime.now(timezone.utc), assessment_name_id=assessment.name_id).save()
         Answer.objects.create(choice_text='choice', questions_id=question.id)
         url = f'{base_url}/assessments/event/?assessmentId={question.assessments_id}&include=children'
         

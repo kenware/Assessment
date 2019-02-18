@@ -11,6 +11,7 @@ from assessment.views.assessment_score import UserScoreViewSet
 from assessment.views.custom404 import custom404, http_mapper
 from rest_framework_jwt.views import obtain_jwt_token
 from assessment.views.assessment_events import AssessmentEventViewSet
+from assessment.views.assessment_name import AssessmentNameViewSet
 
 method = {
     'get': 'list',
@@ -19,7 +20,8 @@ method = {
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, base_name='users')
-router.register(r'assessments', AssessmentTypeViewSet, base_name='assessments')
+router.register(r'assessments/type', AssessmentTypeViewSet, base_name='assessmentTypes')
+router.register(r'assessments', AssessmentNameViewSet, base_name='assessments')
 router.register(r'questions', QuestionViewSet, base_name='questions')
 router.register(r'answers', AnswerViewSet, base_name='answers')
 

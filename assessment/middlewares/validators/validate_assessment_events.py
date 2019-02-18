@@ -7,11 +7,13 @@ from assessment.models import Score, Answer
 from assessment.middlewares.validators.errors import raises_error
 
 
-def validate_assessment_taken(score_object, assessment, user):
+def validate_assessment_taken(*args):
+    score_object, assessment, user, assessment_name = args
     score_object = score_object.last()
+
     if assessment.multi_times and score_object.status == 'finished':
-        score_object = Score.objects.create(user=user, assessments=assessment, start_time=datetime.now(timezone.utc))
-        return score_object  
+        return Score.objects.create(user=user, assessments=assessment,\
+        start_time=datetime.now(timezone.utc), assessment_name=assessment_name) 
     if score_object.status == 'finished':
         raises_error('assessment_end', 400)
     return score_object

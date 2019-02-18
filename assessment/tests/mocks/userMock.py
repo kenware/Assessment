@@ -10,7 +10,7 @@ valid_user = {
         }
 
 valid_assessment = {
-    'title': 'surveyer',
+    'type': 'surveyer',
     'maxTime': datetime.time(0,0,1),
     'totalMark': 100
 }
