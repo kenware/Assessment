@@ -2,10 +2,11 @@
 from django.contrib.auth.models import User
 from datetime import datetime, timezone
 
-from assessment.models import Score, Question, Answer
+from assessment.models import Score, Question, Answer, AssessmentName
 from assessment.middlewares.validators.validate_assessment_events import get_mark_from_question
 
 def get_score_instance(user_id, assessment_id, *args):
+    name = AssessmentName.objects.all()[0]
     history = {}
     total_mark = 0
 
@@ -15,7 +16,7 @@ def get_score_instance(user_id, assessment_id, *args):
        total_mark += mark
        history.update({str(question.id): [correct_answer.id]})
     
-    return Score(user_id=user_id, assessments_id=assessment_id,\
+    return Score(assessment_name_id=name.id, user_id=user_id, assessments_id=assessment_id,\
         start_time=datetime.now(timezone.utc), history=history,correct_score=total_mark)
 
 
@@ -34,5 +35,7 @@ def seed_score():
        ]
 
     for score in score_data:
-        score.save()
-        print('Score successfuly seeded >>>>>>')
+        if not Score.objects.filter(assessment_name_id=score.assessment_name_id,\
+        user_id=score.user_id,assessments_id=score.assessments_id):
+            score.save()
+            print('Score successfuly seeded >>>>>>')

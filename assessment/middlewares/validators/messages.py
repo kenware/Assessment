@@ -16,5 +16,6 @@ error_messages = {
      'multi_times_assessment': 'You have used up the time for this assessment. you can retake this assessment',
      'single_time_assessment': 'You have used up the time for this assessment',
      'history_error': 'You must add userId and assessmentId in the query params to include assessment history',
-     'include_error': "'{}' is not a valid value to include, you can include 'history' of an assessment" 
+     'include_error': "'{}' is not a valid value to include, you can include 'history' of an assessment",
+     'type_error': 'This assessment type already exist in this assessment'
 }

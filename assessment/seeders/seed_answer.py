@@ -23,5 +23,6 @@ def seed_answer():
         Answer(choice_text='moon', questions_id=question4.id),
     ]
     for answer in answer_data:
-        answer.save()
-        print('answer successfuly seeded >>>>>>')
+        if not Answer.objects.filter(choice_text=answer.choice_text, questions_id=answer.questions_id):
+            answer.save()
+            print('answer successfuly seeded >>>>>>')

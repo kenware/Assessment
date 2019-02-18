@@ -19,7 +19,8 @@ def seed_question():
     ]
     for question in question_data:
         assessment = get_object_or_404(Assessment, question.assessments_id)
-        assessment.total_mark += question.mark
-        assessment.save()
-        question.save()
-        print('questions successfuly seeded >>>>>>')
+        if not Question.objects.filter(question_text=question.question_text):
+            assessment.total_mark += question.mark
+            assessment.save()
+            question.save()
+            print('questions successfuly seeded >>>>>>')

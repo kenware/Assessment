@@ -4,7 +4,7 @@ from .assessment_type import Assessment
 # Create your models here.
 
 class Question(BaseModel):
-    mark = models.DecimalField(max_digits=19, decimal_places=10, default=0.0)
+    mark = models.DecimalField(max_digits=19, decimal_places=10, default=1.0)
     number = models.IntegerField(blank=True, null=True)
     question_text = models.TextField(blank=False, null=False)
     assessments = models.ForeignKey(Assessment, related_name='questions', on_delete=models.CASCADE)

@@ -1,6 +1,6 @@
 from .mocks.userMock import valid_user, valid_assessment, valid_question
 from django.contrib.auth.models import User
-from assessment.models import Assessment, Question, Answer, Score
+from assessment.models import Assessment, Question, Answer, Score, AssessmentName
 from assessment.helpers.token_generator import generate_token
 from datetime import datetime, timezone
 
@@ -25,14 +25,20 @@ class TestFixtures():
             user = User(email=valid_user['email'] + str(n), username=valid_user['username'] + str(n))
             user.save()
     
+    def new_assessment_name():
+        assessment_name = AssessmentName.objects.create(name='Andela assessment LOS')
+        return assessment_name
+
     def new_assessment():
-        new_assessment = Assessment(title=valid_assessment['title'], max_time=valid_assessment['maxTime'],total_mark=100)
+        name = TestFixtures.new_assessment_name()
+        new_assessment = Assessment(type=valid_assessment['type'], max_time=valid_assessment['maxTime'],\
+        total_mark=100, name_id=name.id)
         return new_assessment
     
     def new_assessment_object():
-        new_assessment =  TestFixtures.new_assessment()
-        TestFixtures.new_assessment().save()
-        assessment = Assessment.objects.get(title=new_assessment.title) #pylint: disable=E1101
+        name = TestFixtures.new_assessment_name()
+        assessment = Assessment.objects.create(type=valid_assessment['type'], max_time=valid_assessment['maxTime'],\
+        total_mark=100, name=name) #pylint: disable=E1101
         return assessment
 
     def question_list():
@@ -69,7 +75,9 @@ class TestFixtures():
         question = TestFixtures.new_question_object()
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id)
         history = {question.id : [answer.id]}
-        score = Score.objects.create(user_id=user.id, assessments_id=question.assessments.id,start_time=datetime.now(timezone.utc), history=history, status='finished')
+        assessment = Assessment.objects.get(pk=question.assessments.id)
+        score = Score.objects.create(user_id=user.id, assessments_id=question.assessments.id,\
+        start_time=datetime.now(timezone.utc), history=history, status='finished', assessment_name_id=assessment.name_id)
         return token, user, question, answer, score
         
 

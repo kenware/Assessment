@@ -8,7 +8,7 @@ from functools import partial
 
 # Local modules.
 from assessment.models import Score, User, Assessment
-from assessment.serializers.score import ScoreSerializer
+from assessment.serializers.score import ScoreSerializer, ScoreHistorySerializer
 from assessment.helpers.permission import StaffAuthenticatedPermission, AllowedUserPermission
 from assessment.helpers.query_parser import QueryParser
 from assessment.middlewares.validators.score_history_validator import get_paginated_history
@@ -31,7 +31,7 @@ class UserScoreViewSet(viewsets.ModelViewSet):
             
             prev, next, score = get_paginated_history(scores, page_number, assessment_id, user_id, request)
 
-            data = ScoreSerializer(score).data
+            data = ScoreHistorySerializer(score).data
             data['attempt'] = page_number
             data['totalAttempt'] = len(scores)
 
@@ -46,7 +46,7 @@ class UserScoreViewSet(viewsets.ModelViewSet):
 
         if score_id:
             score = get_object_or_404(Score, score_id)
-            return Response(ScoreSerializer(score).data)
+            return Response(ScoreHistorySerializer(score).data)
         else:
 
             return self.get_score_user_id_or_assessment_id(query, request)
