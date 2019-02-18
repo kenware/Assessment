@@ -2,23 +2,13 @@ from rest_framework.response import Response
 
 from assessment.middlewares.validators.errors import raises_error
 from re import sub
-from assessment.middlewares.validators.constants import database_types
+from assessment.middlewares.validators.constants import database_types, related_mapper
 
 class QueryParser():
     valid_include = ['children']
     excluded_fields = ['score', 'questions', 'answers','correct_choices']
-    included_params = ['include', 'order_by', 'assessment_id', 'question_id', 'page', 'user_id']
-    related_mapper = {
-        'assessmentId': {
-            'Question': 'assessments_id'
-        },
-        'questionId': {
-            'Answer': 'questions_id'
-        },
-        'userId': {
-            'Score': 'user_id'
-        },
-    }
+    included_params = ['include', 'order_by', 'assessment_id', 'question_id', 'page', 'user_id', 'assessment_name_id']
+    related_mapper = related_mapper
 
     @classmethod
     def parse_all(cls, *args):
@@ -116,6 +106,8 @@ class QueryParser():
             return { f'{key[6:]}__gte': value }
         elif key.startswith('end'):
             return { f'{key[4:]}__lte': value }
+        return {}
+        
     
     @classmethod
     def validate_order_by(cls, order_by, model):

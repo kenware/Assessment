@@ -43,3 +43,19 @@ database_types = {
 def boolean(value):
     if not (value == 'True' or value == 'False'):
        raises_error('url_query_error', 400, value, 'BooleanField. Valid value is either True or False')
+
+related_mapper = {
+    'assessmentId': {
+        'Question': 'assessments_id',
+        'Score': 'assessments_id',
+    },
+    'questionId': {
+        'Answer': 'questions_id'
+    },
+    'userId': {
+        'Score': 'user_id'
+    },
+    'assessmentNameId': {
+    'Score': 'assessments_id',
+    }
+    }

@@ -15,7 +15,7 @@ base_url = 'http://127.0.0.1:8000/api/v1'
 class AssessmentTypeEndpointsTests(APITestCase):
     def test_get_all_assessment_with_children_succeeds(self):
         
-        url = base_url + '/assessments/?include=children'
+        url = base_url + '/assessments/type/?include=children'
         TestFixtures.question_list()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
@@ -30,7 +30,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
     
     def test_include_children_with_wrong_value_fails(self):
         
-        url = base_url + '/assessments/?include=childre'
+        url = base_url + '/assessments/type/?include=childre'
         TestFixtures.question_list()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
@@ -41,7 +41,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
 
     def test_filter_colunm_with_wrong_data_type_fails(self):
         
-        url = base_url + '/assessments/?totalMark="jj"'
+        url = base_url + '/assessments/type/?totalMark="jj"'
         TestFixtures.question_list()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
@@ -52,7 +52,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
     
     def test_invalid_url_colunm_params_fails(self):
         
-        url = base_url + '/assessments/?ark=700'
+        url = base_url + '/assessments/type/?ark=700'
         TestFixtures.question_list()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
@@ -63,7 +63,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
 
     def test_order_by_with_wrong_params_fails(self):
         
-        url = base_url + '/assessments/?order=ascId'
+        url = base_url + '/assessments/type/?order=ascId'
         TestFixtures.question_list()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
@@ -74,7 +74,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
     
     def test_order_by_without_asc_or_dec_before_colunm_name_fails(self):
         
-        url = base_url + '/assessments/?orderBy=id'
+        url = base_url + '/assessments/type/?orderBy=id'
         TestFixtures.question_list()
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
@@ -86,7 +86,7 @@ class AssessmentTypeEndpointsTests(APITestCase):
     def test_get_an_assessment_with_children_succeeds(self):
              
         question = TestFixtures.new_question_object()
-        url = base_url + f'/assessments/{question.assessments_id}/?include=children'
+        url = base_url + f'/assessments/type/{question.assessments_id}/?include=children'
         token = 'Bearer ' + TestFixtures.auth_token()
         client.credentials(HTTP_AUTHORIZATION=token)
  

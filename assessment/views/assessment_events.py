@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 
 # Local modules.
-from assessment.models import Assessment, Question, Score, Answer
+from assessment.models import Assessment, Question, Score, Answer, AssessmentName
 #helpers
 from assessment.helpers.permission import StaffAuthenticatedPermission, AllowedUserPermission
 from assessment.helpers.query_parser import QueryParser
@@ -36,13 +36,14 @@ class AssessmentEventViewSet(viewsets.ModelViewSet):
         query = request.query_params 
         assessment_id = query.get('assessmentId')
         assessment = get_object_or_404(Assessment, assessment_id)
+        assessment_name = get_object_or_404(AssessmentName, assessment.name_id)
 
         user = request.user
         user_score = Score.objects.filter(user_id=user.id, assessments_id=assessment_id)
         if user_score:
-            user_score = validate_assessment_taken(user_score, assessment, user)    
+            user_score = validate_assessment_taken(user_score, assessment, user, assessment_name)    
         else:
-            user_score = Score.objects.create(user=user, assessments=assessment, start_time=datetime.now(timezone.utc))
+            user_score = Score.objects.create(user=user,assessments=assessment, start_time=datetime.now(timezone.utc), assessment_name=assessment_name)
     
         validate_assessment_time(user_score, assessment)
         assessment_data = AssessmentTypeSerializer(assessment).data       

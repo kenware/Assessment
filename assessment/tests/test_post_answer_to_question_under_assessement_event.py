@@ -23,7 +23,9 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_question_object()
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc)).save()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,\
+        assessment_name_id=assessment.name_id,start_time=datetime.now(timezone.utc)).save()
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id)
         data = {
             'assessmentId': question.assessments_id,
@@ -42,8 +44,9 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_question_object()
-        print(question.assessments_id, '>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc)).save()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,
+        assessment_name_id=assessment.name_id, start_time=datetime.now(timezone.utc)).save()
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
         data = {
             'assessmentId': question.assessments_id,
@@ -63,8 +66,10 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_question_object()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
-        Score(correct_score=question.mark,user_id=user.id, assessments_id=question.assessments_id,\
+        Score(correct_score=question.mark,user_id=user.id,
+        assessment_name_id=assessment.name_id,assessments_id=question.assessments_id,\
         history={ f'{question.id}':[answer.id]},start_time=datetime.now(timezone.utc)).save()       
        
         data = {
@@ -85,9 +90,10 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_question_object()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
         wrong_answer = Answer.objects.create(choice_text='choice', questions_id=question.id)
         correct_answer = Answer.objects.create(choice_text='best choice', questions_id=question.id, is_correct_choice=True)
-        Score(correct_score=0.00,user_id=user.id, assessments_id=question.assessments_id,\
+        Score(correct_score=0.00,user_id=user.id, assessment_name_id=assessment.name_id,assessments_id=question.assessments_id,\
         history={ f'{question.id}':[wrong_answer.id]},start_time=datetime.now(timezone.utc)).save()       
        
         data = {
@@ -108,7 +114,9 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_multi_choice_question_object()
-        Score(user_id=user.id, assessments_id=question.assessments_id,start_time=datetime.now(timezone.utc)).save()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,\
+        assessment_name_id=assessment.name_id,start_time=datetime.now(timezone.utc)).save()
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
         data = {
             'assessmentId': question.assessments_id,
@@ -127,9 +135,10 @@ class AssessmentEventEndpointsTests(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION=token)
         question = TestFixtures.new_multi_choice_question_object()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
 
-        Score(correct_score=question.mark,user_id=user.id, assessments_id=question.assessments_id,\
+        Score(correct_score=question.mark,user_id=user.id, assessment_name_id=assessment.name_id, assessments_id=question.assessments_id,\
         history={ f'{question.id}':[answer.id]},start_time=datetime.now(timezone.utc)).save()       
        
         data = {
@@ -152,7 +161,9 @@ class AssessmentEventEndpointsTests(APITestCase):
         question = TestFixtures.new_multi_choice_question_object()
         answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
 
-        Score(correct_score=question.mark,user_id=user.id, assessments_id=question.assessments_id,\
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        Score(correct_score=question.mark,user_id=user.id,\
+        assessment_name_id=assessment.name_id,assessments_id=question.assessments_id,\
         history={ f'{question.id}':[14]},start_time=datetime.now(timezone.utc)).save()       
        
         data = {

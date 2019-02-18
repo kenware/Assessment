@@ -9,20 +9,35 @@ from assessment.serializers.user import UserSerializer
 from assessment.serializers.assessment_type import AssessmentTypeSerializer
 from assessment.serializers.question import QuestionSerializer
 from assessment.serializers.answer import AnswerSerializer
+from assessment.serializers.assessment_name import AssessmentNameSerializer
 
 
 class ScoreSerializer(serializers.HyperlinkedModelSerializer):
     score = serializers.SerializerMethodField()
-    history = serializers.SerializerMethodField()
     assessments = AssessmentTypeSerializer(read_only=True) 
     user = UserSerializer(read_only=True)
+    assessment_name = AssessmentNameSerializer(read_only=True)
     
     class Meta:
         model = Score
-        fields = ('id', 'start_time', 'end_time', 'status', 'user','assessments', 'score', 'history') 
+        fields = ('id', 'start_time', 'end_time', 'status', 'user','assessments', 'score', 'assessment_name') 
  
     def get_score(self, obj):
-        return f'{(obj.correct_score/(obj.assessments.total_mark))*100}%'
+        return f'{(obj.correct_score/(obj.assessments.total_mark ))*100}%'
+    
+class ScoreHistorySerializer(serializers.HyperlinkedModelSerializer):
+    score = serializers.SerializerMethodField()
+    history = serializers.SerializerMethodField()
+    assessments = AssessmentTypeSerializer(read_only=True) 
+    user = UserSerializer(read_only=True)
+    assessment_name = AssessmentNameSerializer(read_only=True)
+
+    class Meta:
+        model = Score
+        fields = ('id', 'start_time', 'end_time', 'status', 'user','assessments', 'score', 'history', 'assessment_name') 
+ 
+    def get_score(self, obj):
+        return f'{(obj.correct_score/(obj.assessments.total_mark ))*100}%'
      
     def get_history(self, obj):
         history = obj.history
