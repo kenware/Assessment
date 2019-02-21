@@ -61,6 +61,7 @@ class QueryParser():
         related_data = cls.related_mapper.get(key)
         if related_data and related_data.get(model_name):
             related_id_value = query.get(key)
+            cls.validate_field_type('IntegerField', related_id_value)
             url_query.update({related_data[model_name]: related_id_value})
         elif related_data:
             raises_error('url_query_error', 400, key, model_name)

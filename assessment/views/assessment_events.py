@@ -1,13 +1,14 @@
 # Liberaries
 from datetime import datetime, timezone
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.http import HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from functools import partial
 from django.shortcuts import get_object_or_404
-
+from rest_framework import renderers
 
 # Local modules.
 from assessment.models import Assessment, Question, Score, Answer, AssessmentName
@@ -18,6 +19,7 @@ from assessment.helpers.query_parser import QueryParser
 from assessment.serializers.assessment_type import AssessmentTypeSerializer, EagerLoadAssessmentTypeSerializer
 from assessment.serializers.question import QuestionSerializer, EagerLoadQuestionSerializer
 #middlewares
+from assessment.middlewares.validators.errors import raises_error
 from assessment.middlewares.validators.validate_assessment_events import (
     validate_assessment_taken,
     get_mark_from_question,
@@ -31,7 +33,7 @@ class AssessmentEventViewSet(viewsets.ModelViewSet):
     API endpoint that allows users to be viewed or edited.
     """
     permission_classes = (IsAuthenticated, partial(AllowedUserPermission,['GET'], StaffAuthenticatedPermission),)
-    
+
     def list(self, request):
         query = request.query_params 
         assessment_id = query.get('assessmentId')
@@ -65,6 +67,10 @@ class AssessmentEventViewSet(viewsets.ModelViewSet):
         answer = get_object_or_404(Answer, answer_id)
         
         user_score = Score.objects.filter(user_id=user.id, assessments_id=assessment_id).last()
+        if not user_score:
+           raises_error('assessment_not_start', 400)
+        if user_score.status == 'finished':
+           raises_error('assessment_ended', 400)
         validate_assessment_time(user_score, assessment)
 
         history = user_score.history
@@ -72,3 +78,15 @@ class AssessmentEventViewSet(viewsets.ModelViewSet):
         user_score.history = new_history
         user_score.save()
         return Response({'score': user_score.correct_score, 'user': user.username, 'history':user_score.history}, 201)
+    
+    @action(detail=False) 
+    def submit(self, request):
+        user = request.user
+        query_params = request.query_params 
+        assessment_id = query_params.get('assessmentId')
+        assessment = get_object_or_404(Assessment, assessment_id)
+        user_score = Score.objects.filter(user_id=user.id, assessments_id=assessment_id).last()
+        user_score.status = 'finished'
+        user_score.save()
+        return Response({ 'message': 'Assessment successfuly submited'},200)
+    

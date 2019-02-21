@@ -13,7 +13,7 @@ def validate_assessment_taken(*args):
 
     if assessment.multi_times and score_object.status == 'finished':
         return Score.objects.create(user=user, assessments=assessment,\
-        start_time=datetime.now(timezone.utc), assessment_name=assessment_name) 
+        start_time=datetime.now(timezone.utc), assessment_name=assessment_name)
     if score_object.status == 'finished':
         raises_error('assessment_end', 400)
     return score_object

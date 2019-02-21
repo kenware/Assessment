@@ -54,6 +54,7 @@ related_mapper = {
     },
     'userId': {
         'Score': 'user_id'
+        
     },
     'assessmentNameId': {
     'Score': 'assessments_id',

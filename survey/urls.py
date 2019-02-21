@@ -2,6 +2,7 @@
 from django.urls import path, include, re_path
 from rest_framework import routers
 from django.conf.urls import handler404
+from rest_framework import renderers
 
 from assessment.views.user import UserViewSet
 from assessment.views.assessment_type import AssessmentTypeViewSet
@@ -18,6 +19,10 @@ method = {
     'post': 'create'
 }
 
+submit = AssessmentEventViewSet.as_view({
+    'post': 'submit'
+})
+
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet, base_name='users')
 router.register(r'assessments/type', AssessmentTypeViewSet, base_name='assessmentTypes')
@@ -32,6 +37,7 @@ urlpatterns = [
     path(r'api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path(r'api/v1/login/', obtain_jwt_token),
     path(r'api/v1/assessments/event/', AssessmentEventViewSet.as_view(method), name='survey'),
+    path(r'api/v1/assessments/submit/', submit, name='submit'),
     path(r'api/v1/assessments/score/', UserScoreViewSet.as_view({'get':'list'}), name='score'),
     path(r'api/v1/', include(router.urls)),
     re_path(r'^.*$', custom404.as_view(http_mapper), name='error404'),   
