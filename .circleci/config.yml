@@ -5,13 +5,13 @@ git default: &defaults
       environment:
         Assessment_PATH: /home/circleci/Assessment
         DATABASE_NAME: circlecidb
-        DATABASE_USER: circleci
+        DATABASE_USER: postgres
         DATABASE_PASSWORD: ''
         DATABASE_PORT: 5432
         DATABASE_HOST: localhost
-    - image: postgres:9.6
+    - image: circleci/postgres:9.6-alpine
       environment:
-        POSTGRES_USER: circleci
+        POSTGRES_USER: postgres
         POSTGRES_DB: circlecidb
         POSTGRES_PASSWORD: '' 
 
@@ -51,7 +51,5 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python manage.py test --cover-xml
-            ./cc-test-reporter format-coverage --debug coverage.xml -t "coverage.py" -o "cc.testreport.json"
-            ./cc-test-reporter upload-coverage --debug -i cc.testreport.json
+            python manage.py test
             coveralls

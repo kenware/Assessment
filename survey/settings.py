@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'assessment',
     'django_nose',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
@@ -60,6 +62,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 # Tell nose to measure coverage on assessment apps
 NOSE_ARGS = [
     '--with-coverage',
+    '--cover-xml'
    
 ]
 ROOT_URLCONF = 'survey.urls'
@@ -195,4 +198,5 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 
 }
+CORS_ORIGIN_ALLOW_ALL = True
 django_heroku.settings(locals())

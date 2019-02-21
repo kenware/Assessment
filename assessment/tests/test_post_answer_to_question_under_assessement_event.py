@@ -9,6 +9,7 @@ import time
 
 from assessment.models import Assessment, Answer, Score
 client = APIClient()
+from assessment.middlewares.validators.messages import error_messages
 
 #mock
 from .mocks.userMock import valid_assessment
@@ -54,7 +55,6 @@ class AssessmentEventEndpointsTests(APITestCase):
             'answerId': answer.id
         }
         response = client.post(url, data)
-        print(response.data, 'kkkkkkkkkkkkkkkkkkk')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertGreater(response.data['score'], 0)
 
@@ -175,3 +175,62 @@ class AssessmentEventEndpointsTests(APITestCase):
         response = client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertGreater(response.data['score'], question.mark)
+    
+    def test_post_answer_to_question_in_assessment_not_started_fails(self):
+        url = base_url + '/assessments/event/'
+        token, user = TestFixtures.auth_user_token()
+        token = 'Bearer ' + token
+
+        client.credentials(HTTP_AUTHORIZATION=token)
+        question = TestFixtures.new_question_object()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
+        data = {
+            'assessmentId': question.assessments_id,
+            'questionId': question.id,
+            'answerId': answer.id
+        }
+        response = client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['message'], error_messages['assessment_not_start'])
+
+    def test_post_answer_in_a_finished_assessment_fails(self):
+        url = base_url + '/assessments/event/'
+        token, user = TestFixtures.auth_user_token()
+        token = 'Bearer ' + token
+
+        client.credentials(HTTP_AUTHORIZATION=token)
+        question = TestFixtures.new_question_object()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,
+        assessment_name_id=assessment.name_id, start_time=datetime.now(timezone.utc), status='finished').save()
+        answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
+        data = {
+            'assessmentId': question.assessments_id,
+            'questionId': question.id,
+            'answerId': answer.id
+        }
+        response = client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['status'], 'error')
+        self.assertEqual(response.data['message'], error_messages['assessment_end'])
+        
+    def submit_assessment_succed(self):
+        url = base_url + '/assessments/submit/'
+        token, user = TestFixtures.auth_user_token()
+        token = 'Bearer ' + token
+
+        client.credentials(HTTP_AUTHORIZATION=token)
+        question = TestFixtures.new_question_object()
+        assessment = Assessment.objects.get(pk=question.assessments_id)
+        Score(user_id=user.id, assessments_id=question.assessments_id,
+        assessment_name_id=assessment.name_id, start_time=datetime.now(timezone.utc), status='finished').save()
+        answer = Answer.objects.create(choice_text='choice', questions_id=question.id, is_correct_choice=True)
+        data = {
+            'assessmentId': question.assessments_id,
+            'questionId': question.id,
+            'answerId': answer.id
+        }
+        response = client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertGreater(response.data['message'], 'Assessment successfuly submited')
