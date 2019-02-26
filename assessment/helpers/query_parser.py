@@ -7,7 +7,7 @@ from assessment.middlewares.validators.constants import database_types, related_
 class QueryParser():
     valid_include = ['children']
     excluded_fields = ['score', 'questions', 'answers','correct_choices']
-    included_params = ['include', 'order_by', 'assessment_id', 'question_id', 'page', 'user_id', 'assessment_name_id']
+    included_params = ['limit', 'offset','include', 'order_by', 'assessment_id', 'question_id', 'page', 'user_id', 'assessment_name_id']
     related_mapper = related_mapper
 
     @classmethod

@@ -20,10 +20,13 @@ class ScoreSerializer(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         model = Score
-        fields = ('id', 'start_time', 'end_time', 'status', 'user','assessments', 'score', 'assessment_name') 
+        fields = ('id', 'start_time', 'end_time', 'status', 'user','assessments', 'score', 'assessment_name', 'history')
  
     def get_score(self, obj):
-        return f'{(obj.correct_score/(obj.assessments.total_mark ))*100}%'
+        score = float(obj.correct_score) if float(obj.correct_score) > 0 else 0.1
+        total_mark = float(obj.assessments.total_mark)
+        total_mark = total_mark if total_mark > 0 else 0.1
+        return f'{(score/(total_mark))*100}%'
     
 class ScoreHistorySerializer(serializers.HyperlinkedModelSerializer):
     score = serializers.SerializerMethodField()
@@ -37,12 +40,14 @@ class ScoreHistorySerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'start_time', 'end_time', 'status', 'user','assessments', 'score', 'history', 'assessment_name') 
  
     def get_score(self, obj):
-        return f'{(obj.correct_score/(obj.assessments.total_mark ))*100}%'
+        score = float(obj.correct_score) if float(obj.correct_score) > 0 else 0.1
+        total_mark = float(obj.assessments.total_mark)
+        total_mark = total_mark if total_mark > 0 else 0.1
+        return f'{(score/(total_mark))*100}%'
      
     def get_history(self, obj):
         history = obj.history
         history_list = []
-        print(history)
         for key, values in history.items():
             key = int(key)
             question = get_object_or_404(Question, key)
